@@ -1,0 +1,199 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand">タブ起動のサンプル実装</a>
+  </div>
+</nav>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col">
+      <h3>なにこれ</h3>
+      <p>
+        window.open() で開いた子ウィンドウを、
+        タブブラウザのように振舞わせる試作品です。2019年4月13日に作りました。
+      </p>
+      <p>
+        Angular (v7.3.3) + ngx-bootstrap で作り、PC版ChromeとFirefox、Mac版Safariで動作確認しました。Edgeはまともに動きませんでした。他のブラウザは知らん。
+      </p>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col-6">
+      <h4>実装パターンA</h4>
+    </div>
+    <div class="col-6">
+      <h4>実装パターンB</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <div class="row">
+        <div class="col">
+          <div>
+            基本的に新規の子ウィンドウで起動します。
+          </div>
+          <div>
+            ただし、開こうとしているページが既に存在する場合は、
+            新たにウィンドウを開かず、該当のタブをアクティブにします。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      初回の起動時のみ新規の子ウィンドウを作成し、
+      あとはそれを使い回します。
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage1PatternA()">
+            Page 1を起動する
+          </button>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage2PatternA()">
+            Page 2を起動する
+          </button>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage3PatternA()">
+            Page 3を起動する
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage1PatternB()">
+            Page 1を起動する
+          </button>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage2PatternB()">
+            Page 2を起動する
+          </button>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col">
+          <button type="button" class="btn btn-outline-secondary btn-block" (click)="gotoPage3PatternB()">
+            Page 3を起動する
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-outline-secondary btn-block" (click)="allKill()">
+        初期化（おかしくなったら押してください）
+      </button>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col">
+      <h4>制限事項</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-5 col-md-12">
+      <p class="lead">
+        子ウィンドウの中でリフレッシュ操作は禁止です。
+      </p>
+
+      <div class="row">
+        <div class="col-lg-6 col-sm-6 col-12">
+          <p>
+            色々がんばりましたが、内部状態を破綻なく維持するのは不可能でした。
+            そのため、もし子ウィンドウでリフレッシュ操作を行った場合、
+            その子ウィンドウは即死させることにしました。
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-6 col-12">
+          <p>
+            ……と見せかけて、
+            <a href="http://neos21.hatenablog.com/entry/2018/08/16/080000">GitHub
+              PagesがAngularのRouterを巧く捌けない仕様を回避するテク</a>を使った結果、
+            <a href="https://developer.mozilla.org/ja/docs/Web/API/Navigation_timing_API">
+              リフレッシュ検知の為にアテにしていたAPI</a>
+            がマトモに動作しなくなってしまいました。
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12">
+      <p class="lead">
+        タブの切り替え = ページ遷移です。
+      </p>
+      <div class="row">
+        <div class="col-xl-6 col-lg-12">
+          <p>
+            タブを離れる寸前にコンポーネントの状態をどっかに保持し、
+            戻ってきたらふたたび完璧に復元する仕掛けが必要です。
+          </p>
+        </div>
+
+        <div class="col-xl-6 col-lg-12">
+
+          <p>
+            恐らく、<a href="https://github.com/btroncone/ngrx-store-localstorage">こういうライブラリ</a>
+            を駆使すれば実現は可能なのでしょうが、まず間違いなく心が折れます。
+            私は折れました。
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-12">
+      <p class="lead">
+        タブの並べ替えも未サポートです。
+      </p>
+      <p>
+        ドラッグ&ドロップによるタブの並べ替えは未実装です。
+        技術的には可能なはずですが、
+        ガリガリ実装が必要で、ちょっとモチベーションと工数が足りませんでした。
+      </p>
+    </div>
+  </div>
+
+  <hr />
+  <div class="row">
+    <div class="col">
+      <h4>参考文献</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <ul>
+        <li>
+          <a href="https://valor-software.com/ngx-bootstrap/#/tabs#tabs-dynamic">
+            [ngx-bootstrap] Dynamic Tabs
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://stackoverflow.com/questions/48463498/ngx-tabs-v2-0-0-remove-icon-x-shows-in-red-color-in-phones-devices">
+            [stackOverflow] ngx tabs (V2.0.0) remove icon (X) shows in red color in phones / devices
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

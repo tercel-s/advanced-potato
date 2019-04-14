@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div [@openClose]="tabsetManager.tabs.length > 1 ? 'open' : 'closed'">
+    <tabset #tabset>
+      <tab *ngFor="let tabz of tabsetManager.tabs"
+          [heading]="tabz.title"
+          [active]="tabz.active"
+          (selectTab)="selectTabHandler(tabz)"
+          (deselect)="tabz.active = false"
+          [disabled]="tabz.disabled"
+          [removable]="true"
+          (removed)="removeTabHandler(tabz)"
+          [customClass]="tabz.customClass">
+      </tab>
+    </tabset>
+  </div>
+  <router-outlet></router-outlet>
+</div>
